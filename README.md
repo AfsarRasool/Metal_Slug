@@ -7,10 +7,8 @@
 
 ## How to play:
 1. Download the project
-2. Open folder you will see "out" folder
-3. Open "out" folder and you will see "build" folder
-4. Open "build" folder and you will see "Release & Debug" folder
-5. Open "Release & Debug" folder and you will see "mygame.exe" open and fun
+2. open whole folder in Visual Studio community 
+3. select debug startup and run it.  
 
 # Start  
 ![Alt text](Images/1.png)  
