@@ -12,5 +12,12 @@
 4. Open "build" folder and you will see "Release & Debug" folder
 5. Open "Release & Debug" folder and you will see "mygame.exe" open and fun
 
-# Start
+# Start  
 ![Alt text](Images/1.png)  
+# Waling  
+![Alt text](Images/Walking.png)  
+# Drinking  
+![Alt text](Images/Drinking.png)  
+# Firing  
+![Alt text](Images/Fire.png)  
+
