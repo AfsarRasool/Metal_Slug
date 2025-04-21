@@ -14,7 +14,7 @@
 
 # Start  
 ![Alt text](Images/1.png)  
-# Waling  
+# Walking  
 ![Alt text](Images/Walking.png)  
 # Drinking  
 ![Alt text](Images/Drinking.png)  
