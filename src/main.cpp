@@ -9,6 +9,7 @@ using namespace std;
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(1360, 768), "SFML works!");
+	//window.setFramerateLimit(60);
 	Texture map_texture;
 	map_texture.loadFromFile("resources/level1.png");
 	Sprite map_sprite(map_texture);
@@ -34,12 +35,20 @@ int main()
 	Texture enemy_texture;
 	enemy_texture.loadFromFile("resources/mainC.png");
 	
+	vector<Sprite> enemy_sprites;
+	enemy_sprites.push_back(Sprite(enemy_texture));
+	enemy_sprites.push_back(Sprite(enemy_texture));
 
-	Sprite enemy_sprite(enemy_texture);
-	enemy_sprite.setTextureRect(IntRect(308, 20, 40, 40));
-	enemy_sprite.setScale(3, 3);
-	int enemy_health = 100;
-	enemy_sprite.setPosition(700, 600);
+	enemy_sprites[0].setTextureRect(IntRect(308, 20, 40, 40));
+	enemy_sprites[1].setTextureRect(IntRect(308, 912, 40, 40));
+	enemy_sprites[0].setScale(3, 3);
+	enemy_sprites[1].setScale(3, 3);
+	enemy_sprites[0].setPosition(800, 640);
+	enemy_sprites[1].setPosition(700, 640);
+	vector<int> enemy_healths;
+	enemy_healths.push_back(100);
+	enemy_healths.push_back(100);
+
 
 	//..................Variabes...........................................
 	bool fire = false; // FIRING
@@ -57,8 +66,12 @@ int main()
 	bool drink = false;
 	Clock drink_clock;
 
+	Clock Down_shield_clock;
+	bool down_stay = false;
 	while (window.isOpen())
 	{
+	
+
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -75,28 +88,35 @@ int main()
 				window.setView(sf::View(visibleArea));
 			}
 			else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right)
-			{
+			{ 
+				
 				is_movement = true;
 				inhale_direction = true;
-				marco_position.x += increase_oneside;
-				//sprite.setPosition(marco_position);
-				animate.setposition(marco_position);
-			}
+		
+			} 
 			else if (event.type == Event::KeyPressed && event.key.code == Keyboard::Left)
 			{
+			
 				is_movement = true;
 				inhale_direction = false;
-				marco_position.x -= increase_oneside;
-				animate.setposition(marco_position);
+		
 			}
 			else if (event.type == sf::Event::MouseButtonPressed && event.key.code == sf::Mouse::Left)
 			{
-				if (fireclock.getElapsedTime().asMilliseconds()>50)
+				sf::Vector2f mousePos = static_cast<sf::Vector2f>(Mouse::getPosition(window)); // Need to specify window
+				sf::Vector2f spritePos = sprite.getPosition();
+
+				if ((mousePos.x < spritePos.x && !inhale_direction) || (mousePos.x > spritePos.x && inhale_direction))
 				{
-				fire = true;
-				bullets.push_back(bullet);
-				bullets[bullets.size() - 1].Ready_Bullet(sprite.getPosition(), Vector2f(Mouse::getPosition(window)));
+					if (fireclock.getElapsedTime().asMilliseconds() > 50)
+					{
+						fire = true;
+						bullets.push_back(bullet);
+						bullets[bullets.size() - 1].Ready_Bullet(sprite.getPosition(), Vector2f(Mouse::getPosition(window)));
+					}
 				}
+				
+			
 			}
 			else if (event.type == Event::KeyPressed && (event.key.code == Keyboard::LControl || event.key.code == Keyboard::RControl))
 			{
@@ -105,31 +125,20 @@ int main()
 			}
 		}
 
-		//calculate the delta time
-		sf::Time deltaTime = clock.restart();
-		float deltaTimeSeconds = deltaTime.asSeconds();
-
-		//make sure delta time stays within normal bounds, like between one FPS and zero FPS
-		deltaTimeSeconds = std::min(deltaTimeSeconds, 1.f);
-		deltaTimeSeconds = std::max(deltaTimeSeconds, 0.f);
-
-		//for (int i = 0; i < bullets.size(); i++)
-		//{
-		//	bullets[i].move();  // it will move in the specified direction
-		//	if (bullets[i].get_global_bounds().intersects(enemy_sprite.getGlobalBounds()))
-		//	{
-		//		enemy_health -= 10;
-
-		//	}
-		//}
 			for (int i = bullets.size()-1; i>= 0; i--)
-		{
+	      	{ 
 			bullets[i].move();  // it will move in the specified direction
-			if (bullets[i].get_global_bounds().intersects(enemy_sprite.getGlobalBounds()))
+			for (int j = 0; j < enemy_sprites.size(); j++)
 			{
-				enemy_health -= 10;
-				bullets.erase(bullets.begin() + i);
+				if (bullets[i].get_global_bounds().intersects(enemy_sprites[j].getGlobalBounds()) && enemy_healths[j] > 0)
+				{
+					enemy_healths[j] -= 10;
+					bullets.erase(bullets.begin() + i);
+					break;
+				}
+
 			}
+		
 		}
      
 		if (fire)
@@ -138,22 +147,26 @@ int main()
 		}
 		else if ((Keyboard::isKeyPressed(Keyboard::Right)|| Keyboard::isKeyPressed(Keyboard::Left)) && is_movement)
 		{ 
-			
 			animate.Forward_Move(sprite, inhale_direction, Movement_clock);
 		}
 		else if (drink)
 		{
 			animate.Drink_Animation(sprite, inhale_direction, drink_clock, drink);
 		}
-
+		else if (Keyboard::isKeyPressed(Keyboard::Down)|| Keyboard::isKeyPressed(Keyboard::S))
+		{
+			animate.Down_Shield(sprite, inhale_direction, Down_shield_clock,down_stay);
+		}
+		
 		else
 		{
 			animate.Inhale_Animation(sprite, inhale_direction, inhale_clock);
+			down_stay = false;
 		}
 		//sprite.setPosition(animate.Marco_position.x, animate.Marco_position.y+600);
 
-
-		sf::FloatRect bounds = sprite.getGlobalBounds(); // assuming your sprite is called bullet
+		sprite.setScale(Vector2f(3, 3));
+		sf::FloatRect bounds = sprite.getGlobalBounds(); 
 
 		// Create a rectangle for visualizing the bounds
 		sf::RectangleShape rect;
@@ -175,14 +188,17 @@ int main()
 			bullets[i].draw(window);
 			
 		}
-		if (enemy_health>0)
+		for (int i = 0; i < enemy_sprites.size(); i++)
 		{
-	     	window.draw(enemy_sprite);
+			if (enemy_healths[i] > 0)
+			{
+				window.draw(enemy_sprites[i]);
+			}
 		}
+	
 		//window.draw(rect);
 		window.display();
 		
 	}
-
 	return 0;
 }

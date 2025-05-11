@@ -27,7 +27,7 @@ void Bullet::setposition(Vector2f position)
 void Bullet::move()
 {
 	// Update the position of the bullet
-	position += direction ;
+	position += direction;
 	sprite.setPosition(position);
 }
 

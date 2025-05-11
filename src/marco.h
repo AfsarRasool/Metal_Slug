@@ -15,7 +15,8 @@ class Marco
 	Sprite Left_Movement[12];
 	Sprite Right_Drink[14];
 	Sprite Left_Drink[14];
-
+	Sprite Right_Down[4];
+	Sprite Left_Down[4];
 	//....................
 
 	Vector2f Marco_position;
@@ -23,6 +24,7 @@ class Marco
 
 public:
 	Marco();
+	void set_down_sprites(Texture &texture, Sprite* right_down_array, Sprite* left_down_array);
 	void setposition(Vector2f v);
 	Sprite shoot_sprites(int frame_no, bool x);
 	Sprite inhale_sprites(int frame_no,bool x);

@@ -87,7 +87,41 @@ Marco::Marco()
     for (int i = 0; i < 7; i++) {
         Left_Drink[i + 7] = Left_Drink[7 - i - 1];
     }
+    //for (int i = 0; i < 7; i++) {  // Left D
+    //     Right_Down[i].setTexture(texture);
+    //     Right_Down[i].setTextureRect(IntRect(308 - ((i + 1) * 40), 912, 40, 43));
+    //     Right_Down[i].setScale(Marco_Scale);
+    //}
+
+    // Right Down Shield
+    set_down_sprites(texture, Right_Down, Left_Down);  // this is because in this animation i have to apply different rect size for sprite
+
 }
+
+void Marco::set_down_sprites(Texture &texture, Sprite* right_down_array, Sprite* left_down_array)
+{
+   //Right
+    for (int i = 0; i <2 ; i++)
+    {
+        right_down_array[i].setTexture(texture);
+        right_down_array[i].setTextureRect(IntRect(308+(i*40), 915, 40, 40));
+    }
+    right_down_array[2].setTexture(texture);
+    right_down_array[2].setTextureRect(IntRect(308 + (2 * 40), 930, 34, 24));
+    right_down_array[3].setTexture(texture);
+    right_down_array[3].setTextureRect(IntRect(429 , 930, 34, 24));
+  //  Left
+    for (int i = 0; i < 2; i++)
+    {
+        left_down_array[i].setTexture(texture);
+        left_down_array[i].setTextureRect(IntRect(309 - ((i+1) * 40), 915, 40, 40));
+    }
+    left_down_array[2].setTexture(texture);
+    left_down_array[2].setTextureRect(IntRect(309 - (3 * 40), 930, 34, 24));
+    left_down_array[3].setTexture(texture);
+    left_down_array[3].setTextureRect(IntRect(153, 930, 34, 24));
+}
+
 
 void Marco::setposition(Vector2f v)
 {
