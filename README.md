@@ -1,4 +1,4 @@
-# it is made in Cmake make c++ development feature is installed in vs code community
+# it is made in Cmake make sure c++ development feature is installed in vs code community
 ## download zip file and paste it in E local Disk "E:\New folder" this should be your folder path
 
 # Controls:
