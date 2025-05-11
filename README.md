@@ -8,6 +8,7 @@
 
   ## Left Button MOuse: Fire
   
+  # Enemy Dies after 10 bullets
 ## Drinking  
 ![Alt text for the image](Images/Drinking.png)
 
