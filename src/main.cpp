@@ -3,6 +3,7 @@
 #include"bullet.h"
 #include"marco.h"
 #include"animation.h"
+#include"enemy.h"
 
 using namespace sf;
 using namespace std;
@@ -43,11 +44,13 @@ int main()
 	enemy_sprites[1].setTextureRect(IntRect(308, 912, 40, 40));
 	enemy_sprites[0].setScale(3, 3);
 	enemy_sprites[1].setScale(3, 3);
-	enemy_sprites[0].setPosition(800, 640);
-	enemy_sprites[1].setPosition(700, 640);
+	enemy_sprites[0].setPosition(800, 615);
+	enemy_sprites[1].setPosition(700, 615);
 	vector<int> enemy_healths;
 	enemy_healths.push_back(100);
 	enemy_healths.push_back(100);
+
+	Enemy e;
 
 
 	//..................Variabes...........................................
@@ -68,9 +71,14 @@ int main()
 
 	Clock Down_shield_clock;
 	bool down_stay = false;
+
+	sf::Clock deltaClock;
+
 	while (window.isOpen())
 	{
-	
+		float deltaTime = deltaClock.restart().asSeconds();
+
+		e.update(deltaTime, marco.Get_Marco_position());
 
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -128,7 +136,7 @@ int main()
 			for (int i = bullets.size()-1; i>= 0; i--)
 	      	{ 
 			bullets[i].move();  // it will move in the specified direction
-			for (int j = 0; j < enemy_sprites.size(); j++)
+		/*	for (int j = 0; j < enemy_sprites.size(); j++)
 			{
 				if (bullets[i].get_global_bounds().intersects(enemy_sprites[j].getGlobalBounds()) && enemy_healths[j] > 0)
 				{
@@ -137,6 +145,13 @@ int main()
 					break;
 				}
 
+			}*/
+
+			if (bullets[i].get_global_bounds().intersects(e.Enemy_get_global_bounds()) && e.get_enenmy_health() > 0)
+			{
+				e.deduct_health();
+				bullets.erase(bullets.begin() + i);
+				break;
 			}
 		
 		}
@@ -180,6 +195,10 @@ int main()
 		window.clear();
 		window.draw(map_sprite);
 		window.draw(sprite);
+		if (e.get_enenmy_health()>0)
+		{
+			e.draw(window);
+		}
 		
 
 		for (int i = 0; i < bullets.size(); i++)
@@ -188,15 +207,15 @@ int main()
 			bullets[i].draw(window);
 			
 		}
-		for (int i = 0; i < enemy_sprites.size(); i++)
-		{
-			if (enemy_healths[i] > 0)
-			{
-				window.draw(enemy_sprites[i]);
-			}
-		}
+		//for (int i = 0; i < enemy_sprites.size(); i++)
+		//{
+		//	if (enemy_healths[i] > 0)
+		//	{
+		//		window.draw(enemy_sprites[i]);
+		//	}
+		//}
 	
-		//window.draw(rect);
+		window.draw(rect);
 		window.display();
 		
 	}
