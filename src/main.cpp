@@ -36,19 +36,19 @@ int main()
 	Texture enemy_texture;
 	enemy_texture.loadFromFile("resources/mainC.png");
 	
-	vector<Sprite> enemy_sprites;
-	enemy_sprites.push_back(Sprite(enemy_texture));
-	enemy_sprites.push_back(Sprite(enemy_texture));
+	//vector<Sprite> enemy_sprites;
+	//enemy_sprites.push_back(Sprite(enemy_texture));
+	//enemy_sprites.push_back(Sprite(enemy_texture));
 
-	enemy_sprites[0].setTextureRect(IntRect(308, 20, 40, 40));
-	enemy_sprites[1].setTextureRect(IntRect(308, 912, 40, 40));
-	enemy_sprites[0].setScale(3, 3);
-	enemy_sprites[1].setScale(3, 3);
-	enemy_sprites[0].setPosition(800, 615);
-	enemy_sprites[1].setPosition(700, 615);
-	vector<int> enemy_healths;
-	enemy_healths.push_back(100);
-	enemy_healths.push_back(100);
+	//enemy_sprites[0].setTextureRect(IntRect(308, 20, 40, 40));
+	//enemy_sprites[1].setTextureRect(IntRect(308, 912, 40, 40));
+	//enemy_sprites[0].setScale(3, 3);
+	//enemy_sprites[1].setScale(3, 3);
+	//enemy_sprites[0].setPosition(800, 615);
+	//enemy_sprites[1].setPosition(700, 615);
+	//vector<int> enemy_healths;
+	//enemy_healths.push_back(100);
+	//enemy_healths.push_back(100);
 
 	Enemy e;
 
@@ -78,7 +78,7 @@ int main()
 	{
 		float deltaTime = deltaClock.restart().asSeconds();
 
-		e.update(deltaTime, marco.Get_Marco_position());
+		
 
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -136,6 +136,8 @@ int main()
 			for (int i = bullets.size()-1; i>= 0; i--)
 	      	{ 
 			bullets[i].move();  // it will move in the specified direction
+			
+			// this is for enemy i added random pictures but then i added a a enemy with animation so..
 		/*	for (int j = 0; j < enemy_sprites.size(); j++)
 			{
 				if (bullets[i].get_global_bounds().intersects(enemy_sprites[j].getGlobalBounds()) && enemy_healths[j] > 0)
@@ -146,6 +148,8 @@ int main()
 				}
 
 			}*/
+
+
 
 			if (bullets[i].get_global_bounds().intersects(e.Enemy_get_global_bounds()) && e.get_enenmy_health() > 0)
 			{
@@ -160,6 +164,28 @@ int main()
 		{
 			animate.Fire_Animatio(sprite, inhale_direction, fireclock,fire);
 		}
+
+		//This is for non stop firing default logic is for single tab fire
+
+		//else if (Mouse::isButtonPressed(Mouse::Left))
+		//{
+		//	sf::Vector2f mousePos = static_cast<sf::Vector2f>(Mouse::getPosition(window)); // Need to specify window
+		//	sf::Vector2f spritePos = sprite.getPosition();
+
+		//	if ((mousePos.x < spritePos.x && !inhale_direction) || (mousePos.x > spritePos.x && inhale_direction))
+		//	{
+		//		/*if (fireclock.getElapsedTime().asMilliseconds() > 50)*/
+		//		if (1)
+		//		{
+		//			fire = true;
+		//			bullets.push_back(bullet);
+		//			bullets[bullets.size() - 1].Ready_Bullet(sprite.getPosition(), Vector2f(Mouse::getPosition(window)));
+		//		}
+		//	}
+
+
+		//}
+
 		else if ((Keyboard::isKeyPressed(Keyboard::Right)|| Keyboard::isKeyPressed(Keyboard::Left)) && is_movement)
 		{ 
 			animate.Forward_Move(sprite, inhale_direction, Movement_clock);
@@ -178,6 +204,7 @@ int main()
 			animate.Inhale_Animation(sprite, inhale_direction, inhale_clock);
 			down_stay = false;
 		}
+		e.update(deltaTime, sprite.getPosition());
 		//sprite.setPosition(animate.Marco_position.x, animate.Marco_position.y+600);
 
 		sprite.setScale(Vector2f(3, 3));
@@ -215,7 +242,7 @@ int main()
 		//	}
 		//}
 	
-		window.draw(rect);
+		//window.draw(rect);
 		window.display();
 		
 	}

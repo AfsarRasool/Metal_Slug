@@ -44,7 +44,7 @@ void Enemy:: updateAnimation() {
         for (int i = 0; i < currentFrame; i++) x += idleFrameWidths[i] + 1;
         sprite.setTextureRect(sf::IntRect(x, idleYPos, idleFrameWidths[currentFrame], 48));
         animationClock.restart();
-    }
+    }                           
 }
 
 void  Enemy::updateAI(float deltaTime, sf::Vector2f playerPos) {
@@ -56,7 +56,8 @@ void  Enemy::updateAI(float deltaTime, sf::Vector2f playerPos) {
     sf::Vector2f moveDelta(0.f, 0.f);
 
 
-    if (distance <= detectionRange) {
+    if (distance <= detectionRange)
+    {
         if (!isAware) {
             isAware = true;
         }
